@@ -1,3 +1,6 @@
 .vscode/*
-pd
-main.c
+build/*
+bin/*
+lib/*
+CMakeLists.txt
+test/*
