@@ -1,9 +1,8 @@
 #ifndef LEXER_H
 #define LEXER_H
 #include <vector>
-#include "token.hpp"
+#include "node.hpp"
 
-std::vector<Token> tokenize(const std::string &str);
-
+std::vector<Node> tokenize(std::string const &str);
 
 #endif

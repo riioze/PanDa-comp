@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include "lexer.hpp"
+#include "parser.hpp"
 
 int main(int argc, char **argv){
     if (argc == 1) {
@@ -24,9 +25,14 @@ int main(int argc, char **argv){
 
 
     auto tokens = tokenize(content);
-    for (auto t : tokens) {
-        std::cout << t.to_string() << std::endl;
+
+    for (Node n : tokens){
+        std::cout<<n;
     }
+    
+    Node root = get_parse_tree(tokens);
+
+    std::cout << root << std::endl;
 
     return EXIT_SUCCESS;
 }
