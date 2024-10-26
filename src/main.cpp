@@ -26,9 +26,7 @@ int main(int argc, char **argv){
 
     auto tokens = tokenize(content);
 
-    for (Node n : tokens){
-        std::cout<<n;
-    }
+
     
     Node root = get_parse_tree(tokens);
 

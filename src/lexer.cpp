@@ -40,9 +40,6 @@ std::vector<Node> tokenize(std::string const &str){
             node_list.push_back(n);
             buf.clear();
         }
-        if (c=='='){ //TODO deal with == <= ect
-            node_list.push_back(Node(NodeType::assignment, "="));
-        }
         
         //check if it is an operator
         auto fo = OPERATORS.find(c_str);
