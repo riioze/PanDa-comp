@@ -104,6 +104,10 @@ void group_operators(Node &node){ //TODO detect unary operators
     
 }
 
+void group_expressions(Node &node){
+    
+}
+
 Node get_parse_tree(std::vector<Node> node_list){
     Node root(NodeType::program,"root");
     

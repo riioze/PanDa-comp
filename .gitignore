@@ -1,7 +1,8 @@
-.vscode/*
-build/*
-bin/*
-lib/*
+.vscode/
+build/
+bin/
+lib/
 CMakeLists.txt
-test/*
+test/
 *.code-workspace
+docs/
