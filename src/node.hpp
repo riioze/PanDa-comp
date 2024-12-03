@@ -35,6 +35,8 @@ enum class NodeType{
     declaration,
     //! \brief identifier = val;
     assignment,
+    //! \brief full_type identifier = val;
+    initialisation,
     //! \brief immediate
     literal,
 
@@ -76,14 +78,22 @@ struct Node {
     //! \fn Node(NodeType type, std::string repr,int depth)
     //! \brief Basic constructor for a node with a none zero depth
     Node(NodeType type, std::string repr,int depth) : type(type), repr(repr) ,children(), depth(depth){}
-    //! \fn void add_depth()
-    //! \brief Function to increment by one the depth of the Node recursively all its children
-    inline void add_depth(){
-        depth++;
-        for (auto &c:children){
-            c.add_depth();
+    //! \fn void set_depth(int depth)
+    //! \brief set the depth of the Node to depth and recursivly update the depth of its children
+    inline void set_depth(int depth){
+        this->depth = depth;
+        for(auto c:children){
+            c.set_depth(depth+1);
         }
     }
+    //! \fn void add_child(Node child)
+    //! \brief Add a new child Node to the Node
+    //! \param child : the child to add, its depth will be automatically set to depth+1
+    inline void add_child(Node child){
+        child.set_depth(this->depth+1);
+        children.push_back(child);
+    }
+
     
 };
 

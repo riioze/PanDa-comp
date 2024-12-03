@@ -27,6 +27,10 @@ bool is_empty_add(Node n){
     return n.type == NodeType::add_op && n.children.size()==0;
 }
 
+bool is_expression_end(Node n){
+    return n.repr == ";" || n.repr == "{}";
+}
+
 void raise_missmatched_containers(std::string msg){ // TODO real error message
     std::cerr << "Missmatched parentheses : "<<msg<<std::endl;
     exit(EXIT_FAILURE);
@@ -64,7 +68,9 @@ void group_by_containers(Node &node){
         if ((opening+1)!=(closing-1)) {
             std::vector<Node> to_group(opening+1,closing-1);
             
-            grouped.children = get_parse_tree(to_group).children;
+            for (auto c:get_parse_tree(to_group).children){
+                grouped.add_child(c);
+            }
         };
         node_list.erase(opening,closing);
         node_list.insert(opening,grouped);        
@@ -79,11 +85,13 @@ void group_operators(Node &node){ //TODO detect unary operators
     while (mul_it != node_list.end()){
         
         Node mul_op = (*mul_it);
-        mul_op.children = {*(mul_it-1),*(mul_it+1)};
+        mul_op.set_depth(node.depth+1);
+        Node left = *(mul_it-1);
+        mul_op.add_child(left);
+        Node right = *(mul_it+1);
+        mul_op.add_child(right);
         node_list.erase(mul_it-1,mul_it+2);
         node_list.insert(mul_it-1,mul_op);
-        
-        mul_op.add_depth();
 
         mul_it = std::find_if(node_list.begin(),node_list.end(),is_empty_mul);
     }
@@ -91,7 +99,11 @@ void group_operators(Node &node){ //TODO detect unary operators
     auto add_it = std::find_if(node_list.begin(),node_list.end(),is_empty_add);
     while (add_it != node_list.end()){
         Node add_op = (*add_it);
-        add_op.children = {*(add_it-1),*(add_it+1)};
+        add_op.set_depth(node.depth+1);
+        Node left = *(add_it-1);
+        add_op.add_child(left);
+        Node right = *(add_it+1);
+        add_op.add_child(right);
    
         node_list.erase(add_it-1,add_it+2);
         
@@ -104,9 +116,7 @@ void group_operators(Node &node){ //TODO detect unary operators
     
 }
 
-void group_expressions(Node &node){
-    
-}
+
 
 Node get_parse_tree(std::vector<Node> node_list){
     Node root(NodeType::program,"root");
@@ -116,7 +126,7 @@ Node get_parse_tree(std::vector<Node> node_list){
     for (int i=0;i<node_list.size();i++){
         if (node_list[i].type == NodeType::raw_type){ // TODO make more complexe full types
             Node new_node = Node(NodeType::full_type,node_list[i].repr);
-            new_node.children.push_back(node_list[i]);
+            new_node.add_child(node_list[i]);
             node_list[i] = new_node;
         }
     }

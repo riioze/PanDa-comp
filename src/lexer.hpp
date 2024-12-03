@@ -15,4 +15,4 @@ Node get_node(const std::string &str);
 //! \return The list of tokens corresponding to the str
 std::vector<Node> tokenize(std::string const &str);
 
-#endifs
+#endif
