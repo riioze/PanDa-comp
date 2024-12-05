@@ -2,7 +2,6 @@
 build/
 bin/
 lib/
-CMakeLists.txt
 test/
 *.code-workspace
 docs/

@@ -61,6 +61,7 @@ enum class NodeType{
     
 };
 
+
 //! \struct Node
 //! \brief recursive struct containing the tree of the code
 struct Node {
@@ -101,7 +102,7 @@ struct Node {
 //! \fn bool operator==(Node n1,Node n2)
 //! \brief Function to compare 2 nodes and see if they are identical
 inline bool operator==(Node n1,Node n2){
-    return (n1.repr==n2.repr); //FIXME doesnt work when comparing type 
+    return (n1.repr==n2.repr) && n1.type == n2.type;
 }
 
 //! \fn std::ostream &operator<<(std::ostream &os, Node n)

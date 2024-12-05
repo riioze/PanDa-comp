@@ -2,8 +2,8 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include "lexer.hpp"
-#include "parser.hpp"
+#include <lexer.hpp>
+#include <parser.hpp>
 
 int main(int argc, char **argv){
     if (argc == 1) {
