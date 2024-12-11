@@ -4,3 +4,4 @@ bin/
 lib/
 *.code-workspace
 docs/
+Testing/
