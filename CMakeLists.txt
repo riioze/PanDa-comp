@@ -4,9 +4,10 @@ project(PanDa)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-add_subdirectory(test)
+enable_testing()
 add_subdirectory(src)
+add_subdirectory(test)
+
 
 set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
 
