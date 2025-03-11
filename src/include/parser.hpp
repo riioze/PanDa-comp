@@ -17,6 +17,13 @@ int find_last(std::vector<Node> const node_list,Node n);
 //! \param msg : message to add to the error
 void raise_missmatched_containers(std::string msg);
 
+//! \fn Node get_container_node(std::vector<Node> node_list, NodeType type, std::string repr)
+//! \brief Transform the list of nodes in parameter into a Node with the correct container type and repr
+//! \param node_list the list of Node to be put inside the parenthesis (whithout the opening and closing parenthesis)
+//! \param type the type of the container node
+//! \param repr a strign with the opening and closing container
+Node get_container_node(std::vector<Node> node_list, NodeType type, std::string repr);
+
 //! \fn void group_by_containers(Node &node)
 //! \brief recursivly groups the containers and create the parse trees inside of each container
 //! \param node : Node in wich the containors will be matched and grouped

@@ -2,8 +2,8 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <lexer.hpp>
-#include <parser.hpp>
+#include "include/lexer.hpp"
+#include "include/parser.hpp"
 
 int main(int argc, char **argv){
     if (argc == 1) {
@@ -21,7 +21,10 @@ int main(int argc, char **argv){
     std::stringstream content_stream;
     content_stream << input_file.rdbuf();
     input_file.close();
-    std::string content = content_stream.str();
+    std::string content;
+    //content = content_stream.str();
+
+    content="{()}";
 
 
     auto tokens = tokenize(content);

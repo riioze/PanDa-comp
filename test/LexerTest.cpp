@@ -50,10 +50,14 @@ TEST(TokenizeTests, TestBigProg){
         Node(NodeType::paren,")"),
         Node(NodeType::mul_op,"*"),
         Node(NodeType::literal,"2"),
+        Node(NodeType::delimiter,";"),
         Node(NodeType::_return,"return"),
         Node(NodeType::literal,"69"),
+        Node(NodeType::delimiter,";"),
         Node(NodeType::brackets,"}")
     };
+    auto result = tokenize(str);
+    ASSERT_EQ(goal,result);
 }
 
 int main(int argc, char** argv)
