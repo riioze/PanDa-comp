@@ -27,10 +27,14 @@ enum class NodeType{
 
 	//! \brief contains the whole expression
 	expression,
-	//! \brief multiplication operator
+	//! \brief * operator
 	mul_op,
-	//! \brief \+
+	//! \brief / operator
+	div_op,
+	//! \brief \+ operator
 	add_op,
+	//! \brief \\- operator
+	min_op,
 	//! \brief full_type indentifier; 
 	declaration,
 	//! \brief identifier = val;
