@@ -22,7 +22,15 @@ void raise_missmatched_containers(std::string msg);
 //! \param node_list the list of Node to be put inside the parenthesis (whithout the opening and closing parenthesis)
 //! \param type the type of the container node
 //! \param repr a strign with the opening and closing container
+//! \return the container node created
 Node get_container_node(std::vector<Node> node_list, NodeType type, std::string repr);
+
+//! \fn std::vector<Node>::iterator go_to_closing(std::vector<Node>::iterator opening)
+//! \brief find the closing container corresponding to the opening or to the end if not found
+//! \param opening : the iterator to opening containor node
+//! \param end : the iterator to the end of the nodes
+//! \return the iterator to the closing containor or the end if not found
+std::vector<Node>::iterator go_to_closing(std::vector<Node>::iterator opening,std::vector<Node>::iterator end);    
 
 //! \fn void group_by_containers(Node &node)
 //! \brief recursivly groups the containers and create the parse trees inside of each container
@@ -36,7 +44,7 @@ void group_operators(Node &node);
 
 //! \fn Node get_parse_tree(std::vector<Node> node_list)
 //! \brief recursivly create a parse tree from a list of Node
+//! \param root the root of the parse tree, of type program if its the root of the program
 //! \param node_list : the list of Node from wich the parse tree will be created
-//! \return the tree created from a list of nodes
-Node get_parse_tree(std::vector<Node> node_list);
+void get_parse_tree(Node &root, std::vector<Node> node_list);
 #endif

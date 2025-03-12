@@ -22,16 +22,15 @@ int main(int argc, char **argv){
     content_stream << input_file.rdbuf();
     input_file.close();
     std::string content;
-    //content = content_stream.str();
-
-    content="{()}";
+    content = content_stream.str();
 
 
     auto tokens = tokenize(content);
 
 
+    Node root = Node(NodeType::program,"root");
     
-    Node root = get_parse_tree(tokens);
+    get_parse_tree(root,tokens);
 
     std::cout << root << std::endl;
 
