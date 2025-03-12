@@ -1,6 +1,6 @@
 #include "include/parser.hpp"
 
-int find_last(std::vector<Node> const node_list,Node n){
+int find_last(const std::vector<Node>& node_list, Node n){
 	for (int i=node_list.size()-1;i>=0;i--){
 		if (node_list.at(i) == n){
 			return i;
@@ -31,7 +31,7 @@ bool is_expression_end(Node n){
 	return n.repr == ";" || n.repr == "{}";
 }
 
-void raise_missmatched_containers(std::string msg){ // TODO real error message
+void raise_missmatched_containers(const std::string& msg){ // TODO real error message
 	std::cerr << "Missmatched parentheses : "<<msg<<std::endl;
 	exit(EXIT_FAILURE);
 } 
@@ -102,7 +102,7 @@ void group_operators(Node &node){ //TODO detect unary operators
 
 
 
-void get_parse_tree(Node &root, std::vector<Node> node_list){
+void get_parse_tree(Node &root, const std::vector<Node>& node_list){
 	root.add_children(node_list);
 
 	group_by_containers(root);

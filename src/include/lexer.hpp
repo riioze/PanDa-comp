@@ -1,18 +1,26 @@
 #ifndef LEXER_H
 #define LEXER_H
+
 #include <vector>
 #include "node.hpp"
 
-//! \file lexer.hpp
+/**
+ * @file lexer.hpp
+ * @brief Contains functions for lexical analysis.
+ */
 
-//! \fn Node get_node(const std::string &str)
-//! \param str : the string to tranform to Node
-//! \return the Node corresponding to the str
+/**
+ * @brief Converts a string into a corresponding Node.
+ * @param str The string to transform into a Node.
+ * @return The Node corresponding to the given string.
+ */
 Node get_node(const std::string &str);
 
-//! \fn std::vector<Node> tokenize(std::string const &str)
-//! \param str : The string to tokenize
-//! \return The list of tokens corresponding to the str
-std::vector<Node> tokenize(std::string const &str);
+/**
+ * @brief Tokenizes a given string into a list of Nodes.
+ * @param str The input string to tokenize.
+ * @return A vector of Nodes representing the tokens extracted from the string.
+ */
+std::vector<Node> tokenize(const std::string &str);
 
-#endif
+#endif // LEXER_H
