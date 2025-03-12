@@ -36,12 +36,6 @@ void raise_missmatched_containers(std::string msg){ // TODO real error message
 	exit(EXIT_FAILURE);
 } 
 
-Node get_container_node(std::vector<Node> node_list, NodeType type, std::string repr){
-	Node container = Node(type,repr);
-
-	return container;
-}
-
 std::vector<Node>::iterator go_to_closing(std::vector<Node>::iterator opening,std::vector<Node>::iterator end){
 	std::map<NodeType,int> counts = {};
 
@@ -81,7 +75,10 @@ void group_by_containers(Node &node){
 				std::string repr = opening->repr+closing->repr;
 				NodeType type = opening->type;
 				std::vector<Node> children = std::vector(opening+1,closing);
-				Node grouped = get_container_node(children,type,repr);
+				Node grouped(type,repr);
+				grouped.depth = node.depth+1;
+				grouped.add_children(children);
+				group_by_containers(grouped);
 				grouped_children.push_back(grouped);
 				it = closing;
 			}

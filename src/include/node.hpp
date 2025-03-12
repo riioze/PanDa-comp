@@ -94,12 +94,29 @@ struct Node {
 		child.set_depth(this->depth+1);
 		children.push_back(child);
 	}
+	//! \fn void add_child(Node child, int new_depth)
+	//! \brief Add a new child Node to the Node
+	//! \param child : the child to add, its depth will be automatically set to depth+1
+	//! \param new_depth : the depth to assign to the child
+	inline void add_child(Node child,int new_depth){
+		child.set_depth(new_depth);
+		children.push_back(child);
+	}
 	//! \fn void add_children(std::vector<Node> new_children)
 	//! \brief Add new children Nodes to the Node
 	//! \param new_children : the children to add, their depth will be automatically set to depth+1
 	inline void add_children(std::vector<Node> new_children){
 		for (Node child : new_children){
 			add_child(child);
+		}
+	}
+	//! \fn void add_children(std::vector<Node> new_children,int new_depth)
+	//! \brief Add new children Nodes to the Node
+	//! \param new_children : the children to add, their depth will be automatically set to depth+1
+	//! \param new_depth : the depth to assign to the children
+	inline void add_children(std::vector<Node> new_children,int new_depth){
+		for (Node child : new_children){
+			add_child(child,new_depth);
 		}
 	}
 	//! \fn void reset_children(std::vector<Node> new_children)
@@ -109,6 +126,15 @@ struct Node {
 		children.clear();
 		add_children(new_children);
 	}
+	//! \fn void reset_children(std::vector<Node> new_children)
+	//! \brief Clear the nodes children and add the new children Nodes to the Node
+	//! \param new_children : the children to add, their depth will be automatically set to depth+1
+	//! \param new_depth : the depth to assign to the children
+	inline void reset_children(std::vector<Node> new_children,int new_depth){
+		children.clear();
+		add_children(new_children,new_depth);
+	}
+
 
 	
 };

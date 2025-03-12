@@ -17,14 +17,6 @@ int find_last(std::vector<Node> const node_list,Node n);
 //! \param msg : message to add to the error
 void raise_missmatched_containers(std::string msg);
 
-//! \fn Node get_container_node(std::vector<Node> node_list, NodeType type, std::string repr)
-//! \brief Transform the list of nodes in parameter into a Node with the correct container type and repr
-//! \param node_list the list of Node to be put inside the parenthesis (whithout the opening and closing parenthesis)
-//! \param type the type of the container node
-//! \param repr a strign with the opening and closing container
-//! \return the container node created
-Node get_container_node(std::vector<Node> node_list, NodeType type, std::string repr);
-
 //! \fn std::vector<Node>::iterator go_to_closing(std::vector<Node>::iterator opening)
 //! \brief find the closing container corresponding to the opening or to the end if not found
 //! \param opening : the iterator to opening containor node
