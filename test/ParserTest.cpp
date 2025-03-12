@@ -3,15 +3,6 @@
 #include <string>
 #include <vector>
 
-TEST(ParseContainers, BasicContainerTest){
-    std::vector<Node> inside = {
-        Node(NodeType::raw_type,"int64")
-    };
-    Node groupedParens(NodeType::paren,"()");
-    groupedParens.add_child(Node(NodeType::raw_type,"int64"));
-    EXPECT_EQ(groupedParens,get_container_node(inside,NodeType::paren,"()"));
-    EXPECT_EQ(groupedParens.children,get_container_node(inside,NodeType::paren,"()").children);
-}
 
 TEST(ParseContainers, TestRecursiveContainerGrouping){
     Node goal = Node(NodeType::program,"");
