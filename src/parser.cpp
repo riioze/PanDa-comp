@@ -95,16 +95,91 @@ void group_by_containers(Node &node){
 	
 }
 
+std::vector<std::vector<Node>> cut_by_delimiters(std::vector<Node> nodes){
+	std::vector<std::vector<Node>> result;
+	std::vector<Node> currentChunk;
 
-void group_operators(Node &node){ //TODO detect unary operators
+	for (const auto& node : nodes) {
+		if (node.type == NodeType::delimiter) {
+			if (!currentChunk.empty()) {  // Avoid empty chunks
+				std::cout<<currentChunk.size()<<std::endl;
+				result.push_back(std::move(currentChunk));
+				currentChunk.clear();
 
+			}
+		} else if (node.type == NodeType::brackets){
+			if (!currentChunk.empty()) {  // Avoid empty chunks
+				std::cout<<currentChunk.size()<<std::endl;
+				currentChunk.push_back(node);
+				result.push_back(std::move(currentChunk));
+				currentChunk.clear();
+			}
+		} else {
+			currentChunk.push_back(node);
+		}
+	}
+
+	// Push last chunk if not empty
+	if (!currentChunk.empty()) {
+		result.push_back(std::move(currentChunk));
+	}
+
+	return result;
+}
+
+std::vector<Node>::iterator find_lowest_priority_node(std::vector<Node>& nodes) {
+	return std::min_element(nodes.begin(), nodes.end(), [](const Node& a, const Node& b) {
+		auto itA = nodeTypeToPriority.find(a.type);
+		auto itB = nodeTypeToPriority.find(b.type);
+		
+		// If `a` is not in the map, assume maximum priority
+		OpPriority priorityA = (itA != nodeTypeToPriority.end()) ? itA->second : OpPriority::highest;
+		OpPriority priorityB = (itB != nodeTypeToPriority.end()) ? itB->second : OpPriority::highest;
+
+		return priorityA < priorityB;  // Lower priority value means lower precedence
+	});
+}
+
+void group_instructions(Node &node){
+	std::vector<Node> grouped = {};
+
+	for (auto instruction : cut_by_delimiters(node.children)){
+		if (instruction.empty()) continue; // skip empty instructions
+
+		if (instruction.size() == 4 && instruction[0].type == NodeType::raw_type && instruction[1].type == NodeType::identifier && instruction[2].type == NodeType::paren && instruction[3].type == NodeType::brackets){
+			Node instrction_node = Node(NodeType::function,instruction[1].repr,node.depth+1);
+			Node sign = Node(NodeType::function_sign, "sign");
+			sign.add_children(std::vector(instruction.begin(),instruction.end()-1)); // TODO: function params
+			instrction_node.add_child(sign);
+			Node body = Node(NodeType::function_body,"body");
+			body.add_children(instruction[3].children);
+			group_instructions(body);
+			instrction_node.add_child(body);
+			grouped.push_back(instrction_node);
+		}
+
+		else if (instruction[0].type == NodeType::_return){
+			Node instruction_node = instruction[0];
+			instruction_node.add_children(std::vector(instruction.begin()+1,instruction.end()));
+			grouped.push_back(instruction_node);
+		}
+
+		else {
+			std::cerr<<"Unknown instruction"<<std::endl;
+		}
+
+		
+	}
+	node.reset_children(grouped);
 }
 
 
 
-void get_parse_tree(Node &root, const std::vector<Node>& node_list){
+void get_parse_tree(Node &root, const std::vector<Node>& node_list){ //TODO: group types
 	root.add_children(node_list);
 
 	group_by_containers(root);
+
+	group_instructions(root);
 
 }

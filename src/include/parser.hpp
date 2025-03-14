@@ -43,12 +43,27 @@ std::vector<Node>::iterator go_to_closing(std::vector<Node>::iterator opening, s
  */
 void group_by_containers(Node &node);
 
+
 /**
- * @brief Recursively groups operators within a node based on priority rules.
- * 
- * @param node The node in which operators will be matched and grouped.
+ * @brief Splits a vector of Nodes into multiple vectors based on a delimiter (`;`).
+ * @param nodes The vector of Nodes to split.
+ * @return A vector of vectors containing the split sequences.
  */
-void group_operators(Node &node);
+std::vector<std::vector<Node>> cut_by_delimiters(std::vector<Node>);
+
+/**
+ * @brief Finds the node with the lowest priority using iterators.
+ * @param nodes The vector of nodes representing an expression.
+ * @return Iterator to the node with the lowest priority, or `nodes.end()` if no operator is found.
+ */
+std::vector<Node>::iterator find_lowest_priority_node(std::vector<Node>& nodes);
+
+/**
+ * @brief Recursively groups instructions within a node based on priority rules.
+ * 
+ * @param node The node in which instuctions will be matched and grouped.
+ */
+void group_instructions(Node &node);
 
 /**
  * @brief Recursively creates a parse tree from a list of nodes.

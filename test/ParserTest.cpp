@@ -26,7 +26,7 @@ TEST(ParseContainers, TestRecursiveContainerGrouping){
  * This function constructs an expression tree with a single binary operation (e.g., +, -, *, /)
  * and verifies that the `group_operators` function correctly processes it into a structured AST.
  * 
- * @param opType The type of operation (NodeType::add_op, NodeType::min_op, etc.).
+ * @param opType The type of operation (NodeType::add_op, NodeType::sub_op, etc.).
  * @param opSymbol The symbol representing the operation ("+", "-", "*", "/").
  */
 void TestParseOperationWithoutPriority(NodeType opType, const std::string& opSymbol) {
@@ -60,7 +60,7 @@ TEST(ParseOperationWithoutPriority, TestOnlyPlus) {
  * @test Tests parsing of a subtraction operation without priority.
  */
 TEST(ParseOperationWithoutPriority, TestOnlyMinus) {
-    TestParseOperationWithoutPriority(NodeType::min_op, "-");
+    TestParseOperationWithoutPriority(NodeType::sub_op, "-");
 }
 
 /**
