@@ -102,14 +102,12 @@ std::vector<std::vector<Node>> cut_by_delimiters(std::vector<Node> nodes){
 	for (const auto& node : nodes) {
 		if (node.type == NodeType::delimiter) {
 			if (!currentChunk.empty()) {  // Avoid empty chunks
-				std::cout<<currentChunk.size()<<std::endl;
 				result.push_back(std::move(currentChunk));
 				currentChunk.clear();
 
 			}
 		} else if (node.type == NodeType::brackets){
 			if (!currentChunk.empty()) {  // Avoid empty chunks
-				std::cout<<currentChunk.size()<<std::endl;
 				currentChunk.push_back(node);
 				result.push_back(std::move(currentChunk));
 				currentChunk.clear();
@@ -140,6 +138,37 @@ std::vector<Node>::iterator find_lowest_priority_node(std::vector<Node>& nodes) 
 	});
 }
 
+Node get_grouped_expression(std::vector<Node> nodes){
+	if (nodes.size() == 1) { // arrived at a leaf
+		auto node = nodes[0];
+		if (node.type == NodeType::paren){
+			return get_grouped_expression(node.children);
+		} else {
+			return node;
+		}
+	}
+	auto it = find_lowest_priority_node(nodes);
+	if (it == nodes.end()){ // error for now
+		std::cerr<<"multiple nodes w/out priority"<<std::endl;
+		for (auto node:nodes){
+			std::cerr<<node<<std::endl;
+		}
+		exit(EXIT_FAILURE);
+	}
+	auto instruction_node = *it;
+
+	if (it == nodes.begin()){ // left unitary op
+		instruction_node.add_child(get_grouped_expression(std::vector(it+1,nodes.end())));
+	} else if (it == nodes.end()-1) { // right unitary op
+		instruction_node.add_child(get_grouped_expression(std::vector(nodes.begin(),it)));
+	} else {
+		instruction_node.add_child(get_grouped_expression(std::vector(nodes.begin(),it)));
+		instruction_node.add_child(get_grouped_expression(std::vector(it+1,nodes.end())));
+	}
+
+	return instruction_node;
+}
+
 void group_instructions(Node &node){
 	std::vector<Node> grouped = {};
 
@@ -147,25 +176,20 @@ void group_instructions(Node &node){
 		if (instruction.empty()) continue; // skip empty instructions
 
 		if (instruction.size() == 4 && instruction[0].type == NodeType::raw_type && instruction[1].type == NodeType::identifier && instruction[2].type == NodeType::paren && instruction[3].type == NodeType::brackets){
-			Node instrction_node = Node(NodeType::function,instruction[1].repr,node.depth+1);
+			Node instruction_node = Node(NodeType::function,instruction[1].repr,node.depth+1);
 			Node sign = Node(NodeType::function_sign, "sign");
 			sign.add_children(std::vector(instruction.begin(),instruction.end()-1)); // TODO: function params
-			instrction_node.add_child(sign);
+			instruction_node.add_child(sign);
 			Node body = Node(NodeType::function_body,"body");
 			body.add_children(instruction[3].children);
 			group_instructions(body);
-			instrction_node.add_child(body);
-			grouped.push_back(instrction_node);
-		}
-
-		else if (instruction[0].type == NodeType::_return){
-			Node instruction_node = instruction[0];
-			instruction_node.add_children(std::vector(instruction.begin()+1,instruction.end()));
+			instruction_node.add_child(body);
 			grouped.push_back(instruction_node);
 		}
 
 		else {
-			std::cerr<<"Unknown instruction"<<std::endl;
+			Node instruction_node = get_grouped_expression(instruction);
+			grouped.push_back(instruction_node);
 		}
 
 		
