@@ -59,6 +59,13 @@ std::vector<std::vector<Node>> cut_by_delimiters(std::vector<Node>);
 std::vector<Node>::iterator find_lowest_priority_node(std::vector<Node>& nodes);
 
 /**
+ * @brief transforms a list of nodes into a node with children using the lowest priority one
+ * @param nodes The vector of nodes representing an expression.
+ * @return the node created
+ */
+Node get_grouped_expression(std::vector<Node> nodes);
+
+/**
  * @brief Recursively groups instructions within a node based on priority rules.
  * 
  * @param node The node in which instuctions will be matched and grouped.

@@ -1,4 +1,5 @@
 int64 main(){
+    int64 a = -(6+5+4*2);
     int64 i = (3+5)*2;
     return 69;
 }

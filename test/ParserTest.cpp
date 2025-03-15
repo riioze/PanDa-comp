@@ -30,22 +30,19 @@ TEST(ParseContainers, TestRecursiveContainerGrouping){
  * @param opSymbol The symbol representing the operation ("+", "-", "*", "/").
  */
 void TestParseOperationWithoutPriority(NodeType opType, const std::string& opSymbol) {
-    Node goal = Node(NodeType::program, "");
-    Node opNode = Node(opType, opSymbol);
-    goal.children = {opNode};
-    opNode.children = {
+    Node goal = Node(opType, opSymbol);
+    goal.add_children({
         Node(NodeType::literal, "8"),
         Node(NodeType::literal, "2")
-    };
+    });
 
-    Node result = Node(NodeType::program, "");
-    result.children = {
+    std::vector<Node> children = {
         Node(NodeType::literal, "8"),
         Node(opType, opSymbol),
         Node(NodeType::literal, "2")
     };
 
-    group_operators(result);
+    auto result = get_grouped_expression(children);
     EXPECT_EQ(goal, result);
 }
 
