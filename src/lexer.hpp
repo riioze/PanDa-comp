@@ -7,6 +7,9 @@
 #include "node.hpp"
 #include "token.hpp"
 
+/**
+ * Contains all the C++ keywords
+ */
 const std::unordered_set<std::string> CPP_KEYWORDS = {
     // C++ Keywords
     "alignas", "alignof", "and", "and_eq", "asm", "auto", "bitand", "bitor",
@@ -26,6 +29,10 @@ const std::unordered_set<std::string> CPP_KEYWORDS = {
     "import", "module", "constinit", "std"
 };
 
+/**
+ * @class Lexer
+ * @brief Handles the tokenization of the code
+ */
 class Lexer {
     public:
     explicit Lexer(std::istream *input_code);

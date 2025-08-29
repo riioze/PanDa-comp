@@ -2,22 +2,31 @@
 #define PANDA_TOKEN_HPP
 #include <string>
 
-
+/**
+ * @enum TokenType
+ * @brief enum of all the types possible for <code>Token</code>
+ */
 enum TokenType {
     start_of_input,
 
+
     // Literals
+
     integer_literal,
     floating_literal,
     character_literal,
     string_literal,
     boolean_literal,
 
+
     // Identifiers and Keywords
+
     identifier,
     keyword,
 
+
     // Operators
+
     plus,
     minus,
     star,
@@ -42,7 +51,9 @@ enum TokenType {
     logical_or,
     logical_not,
 
+
     // Assignment Operators
+
     plus_assign,
     minus_assign,
     star_assign,
@@ -53,7 +64,9 @@ enum TokenType {
     left_shift_assign,
     right_shift_assign,
 
+
     // Punctuation
+
     left_paren,
     right_paren,
     left_brace,
@@ -70,10 +83,13 @@ enum TokenType {
     arrow_star,
     scope_resolution,
 
+
     // Preprocessor
+
     preprocessor,
 
     // End of File
+
     eof,
 };
 
