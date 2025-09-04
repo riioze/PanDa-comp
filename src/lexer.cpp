@@ -1,5 +1,4 @@
 #include "lexer.hpp"
-
 #include <sstream>
 
 bool is_number(char c) {
@@ -15,64 +14,374 @@ bool is_alpha_numeric(char c) {
 }
 
 bool is_keyword(const std::string& ident) {
-    return CPP_KEYWORDS.find(ident) != CPP_KEYWORDS.end();
+    return CPP_KEYWORDS.contains(ident);
 }
 
 Lexer::Lexer(std::istream *input_code) : current_line(0), current_column(0), current_token(TokenType::start_of_input,-1,-1), last_token(TokenType::start_of_input,-1,-1) {
     this->input_code = input_code;
 }
 
-void Lexer::next_token() {
-    last_token = current_token;
+char Lexer::consume_character(){
     char c;
-    *input_code>>c;
+    *input_code >> c;
+    current_column++;
+    return c;
+}
 
-    while (isspace(c)) {
-        *input_code>>c;
-        if (c == '\n') { // TODO: add handling of commentaries
-            current_line++;
-            current_column = 0;
-        } else {
-            current_column++;
-        }
-    }
+void Lexer::next_token() {
+	last_token = current_token;
+	char c = consume_character();
 
-    if (is_number(c)) {
-        std::stringstream current_number;
-        while (is_number(c)) {
-            current_number<<c;
-            current_column++;
-        }
-        if (c=='.') {
-            current_number<<c;
-            current_column++;
-            while (is_number(c)) {
-                current_number<<c;
-                current_column++;
-            }
-            current_token = Token(TokenType::floating_literal,current_column,current_line,current_number.str());
-            return;
-        }
-        current_token = Token(TokenType::integer_literal,current_column,current_line,current_number.str());
-        return;
-    }
-    if (is_letter(c)) {
-        std::stringstream current_identifier;
-        while (is_alpha_numeric(c)) {
-            current_identifier<<c;
-            current_column++;
-        }
+	while (isspace(c)) { // removes all the spacing characters
+	    c=consume_character();
+	    if (c == '\n') { // TODO: add handling of commentaries
+	        current_line++;
+	        current_column = 0;
+	    }
+	}
 
-        std::string identifier = current_identifier.str();
-        if (is_keyword(identifier)) {
-            if (identifier == "true" || identifier == "false") {
-                current_token = Token(TokenType::boolean_literal,current_column,current_line,identifier);
-                return;
-            }
-            current_token = Token(TokenType::keyword,current_column,current_line,identifier);
-            return;
-        }
-        current_token = Token(TokenType::identifier,current_column,current_line,identifier);
-        return;
-    }
+	if (is_number(c)) { // detect if we start a number token
+	    std::stringstream current_number;
+	    while (is_number(c)) {
+	        c=consume_character();
+	    }
+	    if (c=='.') { // if we have a point it is a floating number
+	        c=consume_character();
+	        while (is_number(c)) {
+	            c=consume_character();
+	        }
+	        current_token = Token(TokenType::floating_literal,current_column,current_line,current_number.str());
+	        return;
+	    }
+	    current_token = Token(TokenType::integer_literal,current_column,current_line,current_number.str());
+	    return;
+	}
+	if (is_letter(c)) { // detect if we start an alphanumerical sequence (keyword or identifier)
+	    std::stringstream current_identifier;
+	    while (is_alpha_numeric(c)) {
+	        current_identifier<<c;
+	        c=consume_character();
+	    }
+
+	    std::string identifier = current_identifier.str();
+	    if (is_keyword(identifier)) {
+	        if (identifier == "true" || identifier == "false") {
+	            current_token = Token(TokenType::boolean_literal,current_column,current_line,identifier);
+	            return;
+	        }
+	        current_token = Token(TokenType::keyword,current_column,current_line,identifier);
+	        return;
+	    }
+	    current_token = Token(TokenType::identifier,current_column,current_line,identifier);
+	    return;
+	}
+
+
+	switch (c) {
+	    case '\'': {
+	        char quoted = consume_character();
+	        if (quoted == '\'') {
+	            throw std::runtime_error("expected a character between the \'\'");
+	        }
+
+	        char end_quote = consume_character();
+	        if (end_quote != '\'') {
+	            throw std::runtime_error("expected a \' after the character");
+	        }
+	        set_current_token(TokenType::character_literal,std::string(1,quoted));
+	        break;
+	    }
+
+	    case '"': {
+	        auto quoted_string = std::stringstream();
+	        char current_char;
+	        while (input_code->good() && input_code->peek() != EOF && input_code->peek() != '"') {
+	            current_char = consume_character();
+	            quoted_string<<current_char;
+	        }
+
+	        if (!input_code->good() || input_code->peek() == EOF) {
+	            throw std::runtime_error("unterminated string");
+	        }
+
+	        char end_quote = consume_character();
+	        if (end_quote != '"') throw std::runtime_error("unterminated string");
+
+	        set_current_token(TokenType::string_literal,quoted_string.str());
+
+	        break;
+	    }
+
+	    case '+': {
+	        if (input_code->peek() == '=') {
+	            consume_character();
+	            set_current_token(TokenType::plus_assign,"+=");
+	            break;
+	        } else if (input_code->peek() == '+'){
+	            consume_character();
+	            set_current_token(TokenType::double_plus,"++");
+	            break;
+	        }
+	        else {
+	            set_current_token(TokenType::plus,"+");
+	            break;
+	        }
+	    }
+
+	    case '-' : {
+	        if (input_code->peek() == '=') {
+	            consume_character();
+	            set_current_token(TokenType::minus_assign,"-=");
+	            break;
+	        } else if (input_code->peek() == '-'){
+	            consume_character();
+	            set_current_token(TokenType::double_minus,"--");
+	            break;
+	        } else if (input_code->peek() == '>') {
+		        consume_character();
+	        	if (input_code->peek() == '*') {
+	        		consume_character();
+	        		set_current_token(TokenType::arrow_star,"->*");
+	        		break;
+	        	} else {
+	        		set_current_token(TokenType::arrow,"->");
+	        		break;
+	        	}
+	        }
+	        else {
+	            set_current_token(TokenType::minus,"-");
+	            break;
+	        }
+	    }
+
+	    case '*' : {
+	        if (input_code->peek() == '=') {
+	            consume_character();
+	            set_current_token(TokenType::star_assign,"*=");
+	            break;
+	        }
+	        else {
+	            set_current_token(TokenType::star,"*");
+	            break;
+	        }
+	    }
+
+	    case '/' : {
+	        if (input_code->peek() == '=') {
+	            consume_character();
+	            set_current_token(TokenType::slash_assign,"/=");
+	            break;
+	        }
+	        else {
+	            set_current_token(TokenType::slash,"/");
+	            break;
+	        }
+	    }
+
+	    case '%' : {
+	        if (input_code->peek() == '=') {
+	            consume_character();
+	            set_current_token(TokenType::percent_assign,"%=");
+	            break;
+	        }
+	        else {
+	            set_current_token(TokenType::percent,"%");
+	            break;
+	        }
+	    }
+
+	    case '=': {
+	        if (input_code->peek() == '=') {
+	            consume_character();
+	            set_current_token(TokenType::double_equal,"==");
+	            break;
+	        }
+	        else {
+	            set_current_token(TokenType::equal,"=");
+	            break;
+	        }
+	    }
+
+	    case '!': {
+	        if (input_code->peek() == '=') {
+	            consume_character();
+	            set_current_token(TokenType::not_equal,"!=");
+	            break;
+	        }
+	        else {
+	            set_current_token(TokenType::logical_not,"!");
+	            break;
+	        }
+	    }
+	    case '>' : {
+	        if (input_code->peek() == '=') {
+	            consume_character();
+	            set_current_token(TokenType::greater_than_or_equal,">=");
+	            break;
+	        } else if (input_code->peek() == '>') {
+	            consume_character();
+	            if (input_code->peek() == '=') {
+	                consume_character();
+	                set_current_token(TokenType::right_shift_assign,">>=");
+	                break;
+	            }
+	            else {
+	                set_current_token(TokenType::right_shift,">>");
+	                break;
+	            }
+	        } else {
+	            set_current_token(TokenType::greater_than,">");
+	            break;
+	        }
+	    }
+
+	    case '<': {
+	        if (input_code->peek() == '=') {
+	            consume_character();
+	            set_current_token(TokenType::less_than_or_equal,"<");
+	            break;
+	        } else if (input_code->peek() == '<') {
+	            consume_character();
+	            if (input_code->peek() == '=') {
+	                consume_character();
+	                set_current_token(TokenType::left_shift_assign,"<<=");
+	                break;
+	            }
+	            else {
+	                set_current_token(TokenType::left_shift,"<<");
+	                break;
+	            }
+	        } else {
+	            set_current_token(TokenType::less_than,"<");
+	        }
+	    }
+
+	    case '|': {
+	        if (input_code->peek() == '=') {
+	            consume_character();
+	            set_current_token(TokenType::pipe_assign,"|=");
+	            break;
+	        } else if (input_code->peek() == '|') {
+	            consume_character();
+	            set_current_token(TokenType::logical_or,"||");
+	            break;
+	        } else {
+	            set_current_token(TokenType::pipe,"|");
+	            break;
+	        }
+	    }
+
+	    case '&': {
+	        if (input_code->peek() == '=') {
+	            consume_character();
+	            set_current_token(TokenType::ampersand_assign,"&=");
+	            break;
+	        } else if (input_code->peek() == '&') {
+	            consume_character();
+	            set_current_token(TokenType::logical_and,"&&");
+	            break;
+	        } else {
+	            set_current_token(TokenType::ampersand,"&");
+	            break;
+	        }
+	    }
+
+	    case '^': {
+	        if (input_code->peek() == '=') {
+	            consume_character();
+	            set_current_token(TokenType::hat_assign,"^=");
+	            break;
+	        } else {
+	            set_current_token(TokenType::hat,"^");
+	            break;
+	        }
+	    }
+
+	    case '~' : {
+	        set_current_token(TokenType::ones_complement,"~");
+	        break;
+	    }
+
+	    case '(': {
+	        set_current_token(TokenType::left_paren,"(");
+	    	break;
+	        break;
+	    }
+
+	    case ')': {
+	        set_current_token(TokenType::right_paren,")");
+	    	break;
+	        break;
+	    }
+
+	    case '{': {
+			set_current_token(TokenType::left_brace,"{");
+	    	break;
+		}
+
+		case '}': {
+			set_current_token(TokenType::right_brace,"}");
+	    	break;
+		}
+
+		case '[' : {
+		    set_current_token(TokenType::left_bracket,"[");
+	    	break;
+	    }
+
+		case ']': {
+			set_current_token(TokenType::right_bracket,"]");
+	    	break;
+		}
+
+		case ';': {
+			set_current_token(TokenType::semicolon,";");
+		    break;
+	    }
+
+		case ',': {
+	    	set_current_token(TokenType::comma,",");
+	    	break;
+		}
+
+		case ':': {
+	    	if (input_code->peek() == ':') {
+	    		consume_character();
+	    		set_current_token(TokenType::scope_resolution,"::");
+	    		break;
+	    	}
+		    else {
+			    set_current_token(TokenType::colon,":");
+	    		break;
+		    }
+		}
+
+		case '?': {
+	    	set_current_token(TokenType::question_mark,"?");
+	    	break;
+	    }
+
+		case '.': {
+		    if (input_code->peek() == '*') {
+			    consume_character();
+		    	set_current_token(TokenType::dot_star,"*");
+		    	break;
+		    } else {
+			    set_current_token(TokenType::dot,".");
+		    	break;
+		    }
+	    }
+
+		case '#' : {
+		    set_current_token(TokenType::hash,"#");
+	    	break;
+	    }
+
+	    default:
+	        throw std::runtime_error("Unexpected character");
+	}
+}
+
+void Lexer::set_current_token(TokenType token_type, const std::string& representation) {
+    current_token = Token(token_type,current_column,current_line,representation);
 }

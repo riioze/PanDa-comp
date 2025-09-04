@@ -7,92 +7,78 @@
  * @brief enum of all the types possible for <code>Token</code>
  */
 enum TokenType {
-    start_of_input,
 
+	start_of_input,                    // Start of input marker
 
-    // Literals
+	// Literals
+	integer_literal,                   // e.g., 42
+	floating_literal,                  // e.g., 3.14
+	character_literal,                 // e.g., 'a'
+	string_literal,                    // e.g., "hello"
+	boolean_literal,                   // e.g., true or false
 
-    integer_literal,
-    floating_literal,
-    character_literal,
-    string_literal,
-    boolean_literal,
+	// Identifiers and Keywords
+	identifier,                        // e.g., myVariable
+	keyword,                           // e.g., if, else, while
 
+	// Operators
+	plus,                              // e.g., +
+	minus,                             // e.g., -
+	star,                              // e.g., *
+	slash,                             // e.g., /
+	percent,                           // e.g., %
+	double_plus,                       // e.g., ++
+	double_minus,                      // e.g., --
+	equal,                             // e.g., =
+	double_equal,                      // e.g., ==
+	not_equal,                         // e.g., !=
+	greater_than,                      // e.g., >
+	less_than,                         // e.g., <
+	greater_than_or_equal,             // e.g., >=
+	less_than_or_equal,                // e.g., <=
+	ampersand,                         // e.g., &
+	pipe,                              // e.g., |
+	hat,                               // e.g., ^
+	left_shift,                        // e.g., <<
+	right_shift,                       // e.g., >>
+	ones_complement,                   // e.g., ~
+	logical_and,                       // e.g., &&
+	logical_or,                        // e.g., ||
+	logical_not,                       // e.g., !
 
-    // Identifiers and Keywords
+	// Assignment Operators
+	plus_assign,                       // e.g., +=
+	minus_assign,                      // e.g., -=
+	star_assign,                       // e.g., *=
+	slash_assign,                      // e.g., /=
+	percent_assign,                    // e.g., %=
+	ampersand_assign,                  // e.g., &=
+	pipe_assign,                       // e.g., |=
+	hat_assign,                        // e.g., ^=
+	left_shift_assign,                 // e.g., <<=
+	right_shift_assign,                // e.g., >>=
 
-    identifier,
-    keyword,
+	// Punctuation
+	left_paren,                        // e.g., (
+	right_paren,                       // e.g., )
+	left_brace,                        // e.g., {
+	right_brace,                       // e.g., }
+	left_bracket,                      // e.g., [
+	right_bracket,                     // e.g., ]
+	semicolon,                         // e.g., ;
+	comma,                             // e.g., ,
+	colon,                             // e.g., :
+	question_mark,                     // e.g., ?
+	dot,                               // e.g., .
+	arrow,                             // e.g., ->
+	dot_star,                          // e.g., .*
+	arrow_star,                        // e.g., ->*
+	scope_resolution,                  // e.g., ::
+	hash,                              // e.g., #
 
-
-    // Operators
-
-    plus,
-    minus,
-    star,
-    slash,
-    percent,
-    double_plus,
-    double_minus,
-    equal,
-    double_equal,
-    not_equal,
-    greater_than,
-    less_than,
-    greater_than_or_equal,
-    less_than_or_equal,
-    ampersand,
-    pipe,
-    hat,
-    left_shift,
-    right_shift,
-    ones_complement,
-    logical_and,
-    logical_or,
-    logical_not,
-
-
-    // Assignment Operators
-
-    plus_assign,
-    minus_assign,
-    star_assign,
-    slash_assign,
-    ampersand_assign,
-    pipe_assign,
-    hat_assign,
-    left_shift_assign,
-    right_shift_assign,
-
-
-    // Punctuation
-
-    left_paren,
-    right_paren,
-    left_brace,
-    right_brace,
-    left_bracket,
-    right_bracket,
-    semicolon,
-    comma,
-    colon,
-    question_mark,
-    dot,
-    arrow,
-    dot_star,
-    arrow_star,
-    scope_resolution,
-
-
-    // Preprocessor
-
-    preprocessor,
-
-    // End of File
-
-    eof,
+	// End of File
+	eof,                               // End of file marker
 };
-
 
 class Token {
     public:
