@@ -1,10 +1,9 @@
 #ifndef PANDA_LEXER_HPP
 #define PANDA_LEXER_HPP
 #include <iosfwd>
-#include <istream>
+#include <sstream>
 #include <unordered_set>
 
-#include "node.hpp"
 #include "token.hpp"
 
 /**
@@ -39,7 +38,9 @@ const std::unordered_set<std::string> CPP_KEYWORDS = {
  */
 class Lexer {
     public:
-    explicit Lexer(std::istream *input_code);
+	explicit Lexer(std::string& input_string) :
+	input_code(input_string), current_line(0), current_column(0), current_token(TokenType::start_of_input, -1, -1),
+	last_token(TokenType::start_of_input, -1, -1) {}
 
     char consume_character();
     void next_token();
@@ -47,7 +48,7 @@ class Lexer {
     void accept_token();
 
     private:
-    std::istream *input_code;
+    std::istringstream input_code;
     int current_line = 0;
     int current_column = 0;
 

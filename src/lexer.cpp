@@ -17,13 +17,9 @@ bool is_keyword(const std::string& ident) {
     return CPP_KEYWORDS.contains(ident);
 }
 
-Lexer::Lexer(std::istream *input_code) : current_line(0), current_column(0), current_token(TokenType::start_of_input,-1,-1), last_token(TokenType::start_of_input,-1,-1) {
-    this->input_code = input_code;
-}
-
 char Lexer::consume_character(){
     char c;
-    *input_code >> c;
+    input_code >> c;
     current_column++;
     return c;
 }
@@ -95,12 +91,12 @@ void Lexer::next_token() {
 	    case '"': {
 	        auto quoted_string = std::stringstream();
 	        char current_char;
-	        while (input_code->good() && input_code->peek() != EOF && input_code->peek() != '"') {
+	        while (input_code.good() && input_code.peek() != EOF && input_code.peek() != '"') {
 	            current_char = consume_character();
 	            quoted_string<<current_char;
 	        }
 
-	        if (!input_code->good() || input_code->peek() == EOF) {
+	        if (!input_code.good() || input_code.peek() == EOF) {
 	            throw std::runtime_error("unterminated string");
 	        }
 
@@ -113,11 +109,11 @@ void Lexer::next_token() {
 	    }
 
 	    case '+': {
-	        if (input_code->peek() == '=') {
+	        if (input_code.peek() == '=') {
 	            consume_character();
 	            set_current_token(TokenType::plus_assign,"+=");
 	            break;
-	        } else if (input_code->peek() == '+'){
+	        } else if (input_code.peek() == '+'){
 	            consume_character();
 	            set_current_token(TokenType::double_plus,"++");
 	            break;
@@ -129,17 +125,17 @@ void Lexer::next_token() {
 	    }
 
 	    case '-' : {
-	        if (input_code->peek() == '=') {
+	        if (input_code.peek() == '=') {
 	            consume_character();
 	            set_current_token(TokenType::minus_assign,"-=");
 	            break;
-	        } else if (input_code->peek() == '-'){
+	        } else if (input_code.peek() == '-'){
 	            consume_character();
 	            set_current_token(TokenType::double_minus,"--");
 	            break;
-	        } else if (input_code->peek() == '>') {
+	        } else if (input_code.peek() == '>') {
 		        consume_character();
-	        	if (input_code->peek() == '*') {
+	        	if (input_code.peek() == '*') {
 	        		consume_character();
 	        		set_current_token(TokenType::arrow_star,"->*");
 	        		break;
@@ -155,7 +151,7 @@ void Lexer::next_token() {
 	    }
 
 	    case '*' : {
-	        if (input_code->peek() == '=') {
+	        if (input_code.peek() == '=') {
 	            consume_character();
 	            set_current_token(TokenType::star_assign,"*=");
 	            break;
@@ -167,7 +163,7 @@ void Lexer::next_token() {
 	    }
 
 	    case '/' : {
-	        if (input_code->peek() == '=') {
+	        if (input_code.peek() == '=') {
 	            consume_character();
 	            set_current_token(TokenType::slash_assign,"/=");
 	            break;
@@ -179,7 +175,7 @@ void Lexer::next_token() {
 	    }
 
 	    case '%' : {
-	        if (input_code->peek() == '=') {
+	        if (input_code.peek() == '=') {
 	            consume_character();
 	            set_current_token(TokenType::percent_assign,"%=");
 	            break;
@@ -191,7 +187,7 @@ void Lexer::next_token() {
 	    }
 
 	    case '=': {
-	        if (input_code->peek() == '=') {
+	        if (input_code.peek() == '=') {
 	            consume_character();
 	            set_current_token(TokenType::double_equal,"==");
 	            break;
@@ -203,7 +199,7 @@ void Lexer::next_token() {
 	    }
 
 	    case '!': {
-	        if (input_code->peek() == '=') {
+	        if (input_code.peek() == '=') {
 	            consume_character();
 	            set_current_token(TokenType::not_equal,"!=");
 	            break;
@@ -214,13 +210,13 @@ void Lexer::next_token() {
 	        }
 	    }
 	    case '>' : {
-	        if (input_code->peek() == '=') {
+	        if (input_code.peek() == '=') {
 	            consume_character();
 	            set_current_token(TokenType::greater_than_or_equal,">=");
 	            break;
-	        } else if (input_code->peek() == '>') {
+	        } else if (input_code.peek() == '>') {
 	            consume_character();
-	            if (input_code->peek() == '=') {
+	            if (input_code.peek() == '=') {
 	                consume_character();
 	                set_current_token(TokenType::right_shift_assign,">>=");
 	                break;
@@ -236,13 +232,13 @@ void Lexer::next_token() {
 	    }
 
 	    case '<': {
-	        if (input_code->peek() == '=') {
+	        if (input_code.peek() == '=') {
 	            consume_character();
 	            set_current_token(TokenType::less_than_or_equal,"<");
 	            break;
-	        } else if (input_code->peek() == '<') {
+	        } else if (input_code.peek() == '<') {
 	            consume_character();
-	            if (input_code->peek() == '=') {
+	            if (input_code.peek() == '=') {
 	                consume_character();
 	                set_current_token(TokenType::left_shift_assign,"<<=");
 	                break;
@@ -257,11 +253,11 @@ void Lexer::next_token() {
 	    }
 
 	    case '|': {
-	        if (input_code->peek() == '=') {
+	        if (input_code.peek() == '=') {
 	            consume_character();
 	            set_current_token(TokenType::pipe_assign,"|=");
 	            break;
-	        } else if (input_code->peek() == '|') {
+	        } else if (input_code.peek() == '|') {
 	            consume_character();
 	            set_current_token(TokenType::logical_or,"||");
 	            break;
@@ -272,11 +268,11 @@ void Lexer::next_token() {
 	    }
 
 	    case '&': {
-	        if (input_code->peek() == '=') {
+	        if (input_code.peek() == '=') {
 	            consume_character();
 	            set_current_token(TokenType::ampersand_assign,"&=");
 	            break;
-	        } else if (input_code->peek() == '&') {
+	        } else if (input_code.peek() == '&') {
 	            consume_character();
 	            set_current_token(TokenType::logical_and,"&&");
 	            break;
@@ -287,7 +283,7 @@ void Lexer::next_token() {
 	    }
 
 	    case '^': {
-	        if (input_code->peek() == '=') {
+	        if (input_code.peek() == '=') {
 	            consume_character();
 	            set_current_token(TokenType::hat_assign,"^=");
 	            break;
@@ -305,13 +301,11 @@ void Lexer::next_token() {
 	    case '(': {
 	        set_current_token(TokenType::left_paren,"(");
 	    	break;
-	        break;
 	    }
 
 	    case ')': {
 	        set_current_token(TokenType::right_paren,")");
 	    	break;
-	        break;
 	    }
 
 	    case '{': {
@@ -345,7 +339,7 @@ void Lexer::next_token() {
 		}
 
 		case ':': {
-	    	if (input_code->peek() == ':') {
+	    	if (input_code.peek() == ':') {
 	    		consume_character();
 	    		set_current_token(TokenType::scope_resolution,"::");
 	    		break;
@@ -362,7 +356,7 @@ void Lexer::next_token() {
 	    }
 
 		case '.': {
-		    if (input_code->peek() == '*') {
+		    if (input_code.peek() == '*') {
 			    consume_character();
 		    	set_current_token(TokenType::dot_star,"*");
 		    	break;
