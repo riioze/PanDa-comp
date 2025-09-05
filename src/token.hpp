@@ -1,6 +1,7 @@
 #ifndef PANDA_TOKEN_HPP
 #define PANDA_TOKEN_HPP
 #include <string>
+#include <utility>
 
 /**
  * @enum TokenType
@@ -80,13 +81,12 @@ enum TokenType {
 	eof,                               // End of file marker
 };
 
-class Token {
+struct Token {
     public:
-    Token(TokenType,int,int);
-    Token(TokenType,int,int, const std::string &);
+    Token(TokenType token_type,int line,int column) : token_type(token_type), line(line), column(column) {}
+	Token(TokenType token_type,int line,int column, std::string  representation) : token_type(token_type), line(line), column(column), representation(std::move(representation)) {}
 
-    private:
-    TokenType type;
+    TokenType token_type;
     int line, column;
 
     std::string representation;

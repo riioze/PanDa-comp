@@ -84,7 +84,7 @@ void Lexer::next_token() {
 	        if (end_quote != '\'') {
 	            throw std::runtime_error("expected a \' after the character");
 	        }
-	        set_current_token(TokenType::character_literal,std::string(1,quoted));
+	        set_current_token(TokenType::character_literal, std::string(1, quoted));
 	        break;
 	    }
 
@@ -103,7 +103,7 @@ void Lexer::next_token() {
 	        char end_quote = consume_character();
 	        if (end_quote != '"') throw std::runtime_error("unterminated string");
 
-	        set_current_token(TokenType::string_literal,quoted_string.str());
+	        set_current_token(TokenType::string_literal, quoted_string.str());
 
 	        break;
 	    }
@@ -111,15 +111,15 @@ void Lexer::next_token() {
 	    case '+': {
 	        if (input_code.peek() == '=') {
 	            consume_character();
-	            set_current_token(TokenType::plus_assign,"+=");
+	            set_current_token(TokenType::plus_assign, "+=");
 	            break;
 	        } else if (input_code.peek() == '+'){
 	            consume_character();
-	            set_current_token(TokenType::double_plus,"++");
+	            set_current_token(TokenType::double_plus, "++");
 	            break;
 	        }
 	        else {
-	            set_current_token(TokenType::plus,"+");
+	            set_current_token(TokenType::plus, "+");
 	            break;
 	        }
 	    }
@@ -127,25 +127,25 @@ void Lexer::next_token() {
 	    case '-' : {
 	        if (input_code.peek() == '=') {
 	            consume_character();
-	            set_current_token(TokenType::minus_assign,"-=");
+	            set_current_token(TokenType::minus_assign, "-=");
 	            break;
 	        } else if (input_code.peek() == '-'){
 	            consume_character();
-	            set_current_token(TokenType::double_minus,"--");
+	            set_current_token(TokenType::double_minus, "--");
 	            break;
 	        } else if (input_code.peek() == '>') {
 		        consume_character();
 	        	if (input_code.peek() == '*') {
 	        		consume_character();
-	        		set_current_token(TokenType::arrow_star,"->*");
+	        		set_current_token(TokenType::arrow_star, "->*");
 	        		break;
 	        	} else {
-	        		set_current_token(TokenType::arrow,"->");
+	        		set_current_token(TokenType::arrow, "->");
 	        		break;
 	        	}
 	        }
 	        else {
-	            set_current_token(TokenType::minus,"-");
+	            set_current_token(TokenType::minus, "-");
 	            break;
 	        }
 	    }
@@ -153,11 +153,11 @@ void Lexer::next_token() {
 	    case '*' : {
 	        if (input_code.peek() == '=') {
 	            consume_character();
-	            set_current_token(TokenType::star_assign,"*=");
+	            set_current_token(TokenType::star_assign, "*=");
 	            break;
 	        }
 	        else {
-	            set_current_token(TokenType::star,"*");
+	            set_current_token(TokenType::star, "*");
 	            break;
 	        }
 	    }
@@ -165,11 +165,11 @@ void Lexer::next_token() {
 	    case '/' : {
 	        if (input_code.peek() == '=') {
 	            consume_character();
-	            set_current_token(TokenType::slash_assign,"/=");
+	            set_current_token(TokenType::slash_assign, "/=");
 	            break;
 	        }
 	        else {
-	            set_current_token(TokenType::slash,"/");
+	            set_current_token(TokenType::slash, "/");
 	            break;
 	        }
 	    }
@@ -177,11 +177,11 @@ void Lexer::next_token() {
 	    case '%' : {
 	        if (input_code.peek() == '=') {
 	            consume_character();
-	            set_current_token(TokenType::percent_assign,"%=");
+	            set_current_token(TokenType::percent_assign, "%=");
 	            break;
 	        }
 	        else {
-	            set_current_token(TokenType::percent,"%");
+	            set_current_token(TokenType::percent, "%");
 	            break;
 	        }
 	    }
@@ -189,11 +189,11 @@ void Lexer::next_token() {
 	    case '=': {
 	        if (input_code.peek() == '=') {
 	            consume_character();
-	            set_current_token(TokenType::double_equal,"==");
+	            set_current_token(TokenType::double_equal, "==");
 	            break;
 	        }
 	        else {
-	            set_current_token(TokenType::equal,"=");
+	            set_current_token(TokenType::equal, "=");
 	            break;
 	        }
 	    }
@@ -201,32 +201,32 @@ void Lexer::next_token() {
 	    case '!': {
 	        if (input_code.peek() == '=') {
 	            consume_character();
-	            set_current_token(TokenType::not_equal,"!=");
+	            set_current_token(TokenType::not_equal, "!=");
 	            break;
 	        }
 	        else {
-	            set_current_token(TokenType::logical_not,"!");
+	            set_current_token(TokenType::logical_not, "!");
 	            break;
 	        }
 	    }
 	    case '>' : {
 	        if (input_code.peek() == '=') {
 	            consume_character();
-	            set_current_token(TokenType::greater_than_or_equal,">=");
+	            set_current_token(TokenType::greater_than_or_equal, ">=");
 	            break;
 	        } else if (input_code.peek() == '>') {
 	            consume_character();
 	            if (input_code.peek() == '=') {
 	                consume_character();
-	                set_current_token(TokenType::right_shift_assign,">>=");
+	                set_current_token(TokenType::right_shift_assign, ">>=");
 	                break;
 	            }
 	            else {
-	                set_current_token(TokenType::right_shift,">>");
+	                set_current_token(TokenType::right_shift, ">>");
 	                break;
 	            }
 	        } else {
-	            set_current_token(TokenType::greater_than,">");
+	            set_current_token(TokenType::greater_than, ">");
 	            break;
 	        }
 	    }
@@ -234,35 +234,35 @@ void Lexer::next_token() {
 	    case '<': {
 	        if (input_code.peek() == '=') {
 	            consume_character();
-	            set_current_token(TokenType::less_than_or_equal,"<");
+	            set_current_token(TokenType::less_than_or_equal, "<");
 	            break;
 	        } else if (input_code.peek() == '<') {
 	            consume_character();
 	            if (input_code.peek() == '=') {
 	                consume_character();
-	                set_current_token(TokenType::left_shift_assign,"<<=");
+	                set_current_token(TokenType::left_shift_assign, "<<=");
 	                break;
 	            }
 	            else {
-	                set_current_token(TokenType::left_shift,"<<");
+	                set_current_token(TokenType::left_shift, "<<");
 	                break;
 	            }
 	        } else {
-	            set_current_token(TokenType::less_than,"<");
+	            set_current_token(TokenType::less_than, "<");
 	        }
 	    }
 
 	    case '|': {
 	        if (input_code.peek() == '=') {
 	            consume_character();
-	            set_current_token(TokenType::pipe_assign,"|=");
+	            set_current_token(TokenType::pipe_assign, "|=");
 	            break;
 	        } else if (input_code.peek() == '|') {
 	            consume_character();
-	            set_current_token(TokenType::logical_or,"||");
+	            set_current_token(TokenType::logical_or, "||");
 	            break;
 	        } else {
-	            set_current_token(TokenType::pipe,"|");
+	            set_current_token(TokenType::pipe, "|");
 	            break;
 	        }
 	    }
@@ -270,14 +270,14 @@ void Lexer::next_token() {
 	    case '&': {
 	        if (input_code.peek() == '=') {
 	            consume_character();
-	            set_current_token(TokenType::ampersand_assign,"&=");
+	            set_current_token(TokenType::ampersand_assign, "&=");
 	            break;
 	        } else if (input_code.peek() == '&') {
 	            consume_character();
-	            set_current_token(TokenType::logical_and,"&&");
+	            set_current_token(TokenType::logical_and, "&&");
 	            break;
 	        } else {
-	            set_current_token(TokenType::ampersand,"&");
+	            set_current_token(TokenType::ampersand, "&");
 	            break;
 	        }
 	    }
@@ -285,89 +285,89 @@ void Lexer::next_token() {
 	    case '^': {
 	        if (input_code.peek() == '=') {
 	            consume_character();
-	            set_current_token(TokenType::hat_assign,"^=");
+	            set_current_token(TokenType::hat_assign, "^=");
 	            break;
 	        } else {
-	            set_current_token(TokenType::hat,"^");
+	            set_current_token(TokenType::hat, "^");
 	            break;
 	        }
 	    }
 
 	    case '~' : {
-	        set_current_token(TokenType::ones_complement,"~");
+	        set_current_token(TokenType::ones_complement, "~");
 	        break;
 	    }
 
 	    case '(': {
-	        set_current_token(TokenType::left_paren,"(");
+	        set_current_token(TokenType::left_paren, "(");
 	    	break;
 	    }
 
 	    case ')': {
-	        set_current_token(TokenType::right_paren,")");
+	        set_current_token(TokenType::right_paren, ")");
 	    	break;
 	    }
 
 	    case '{': {
-			set_current_token(TokenType::left_brace,"{");
+			set_current_token(TokenType::left_brace, "{");
 	    	break;
 		}
 
 		case '}': {
-			set_current_token(TokenType::right_brace,"}");
+			set_current_token(TokenType::right_brace, "}");
 	    	break;
 		}
 
 		case '[' : {
-		    set_current_token(TokenType::left_bracket,"[");
+		    set_current_token(TokenType::left_bracket, "[");
 	    	break;
 	    }
 
 		case ']': {
-			set_current_token(TokenType::right_bracket,"]");
+			set_current_token(TokenType::right_bracket, "]");
 	    	break;
 		}
 
 		case ';': {
-			set_current_token(TokenType::semicolon,";");
+			set_current_token(TokenType::semicolon, ";");
 		    break;
 	    }
 
 		case ',': {
-	    	set_current_token(TokenType::comma,",");
+	    	set_current_token(TokenType::comma, ",");
 	    	break;
 		}
 
 		case ':': {
 	    	if (input_code.peek() == ':') {
 	    		consume_character();
-	    		set_current_token(TokenType::scope_resolution,"::");
+	    		set_current_token(TokenType::scope_resolution, "::");
 	    		break;
 	    	}
 		    else {
-			    set_current_token(TokenType::colon,":");
+			    set_current_token(TokenType::colon, ":");
 	    		break;
 		    }
 		}
 
 		case '?': {
-	    	set_current_token(TokenType::question_mark,"?");
+	    	set_current_token(TokenType::question_mark, "?");
 	    	break;
 	    }
 
 		case '.': {
 		    if (input_code.peek() == '*') {
 			    consume_character();
-		    	set_current_token(TokenType::dot_star,"*");
+		    	set_current_token(TokenType::dot_star, "*");
 		    	break;
 		    } else {
-			    set_current_token(TokenType::dot,".");
+			    set_current_token(TokenType::dot, ".");
 		    	break;
 		    }
 	    }
 
 		case '#' : {
-		    set_current_token(TokenType::hash,"#");
+		    set_current_token(TokenType::hash, "#");
 	    	break;
 	    }
 
@@ -375,7 +375,20 @@ void Lexer::next_token() {
 	        throw std::runtime_error("Unexpected character");
 	}
 }
+bool Lexer::check_token(TokenType expected) {
+	if (current_token.token_type == expected) {
+		next_token();
+		return true;
+	}
+	return false;
+}
+void Lexer::accept_token(TokenType expected) {
+	if (!check_token(expected)) {
+		throw std::runtime_error("Unexpected Token");
+	}
+}
 
-void Lexer::set_current_token(TokenType token_type, const std::string& representation) {
+
+void Lexer::set_current_token(TokenType token_type, const std::string &representation) {
     current_token = Token(token_type,current_column,current_line,representation);
 }

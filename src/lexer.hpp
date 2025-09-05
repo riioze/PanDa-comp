@@ -44,8 +44,8 @@ class Lexer {
 
     char consume_character();
     void next_token();
-    bool check_token();
-    void accept_token();
+    bool check_token(TokenType expected);
+    void accept_token(TokenType expected);
 
     private:
     std::istringstream input_code;
@@ -53,7 +53,7 @@ class Lexer {
     int current_column = 0;
 
     Token current_token,last_token;
-    void set_current_token(TokenType token_type, const std::string& representation);
+    void set_current_token(TokenType token_type, const std::string &representation);
 };
 
 
