@@ -4,4 +4,6 @@ add_executable(pd main.cpp
         lexer.hpp
         node.cpp
         node.hpp
-        token.hpp)
+        token.hpp
+        parser.cpp
+        parser.hpp)

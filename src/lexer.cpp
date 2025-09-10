@@ -1,4 +1,6 @@
 #include "lexer.hpp"
+
+#include <algorithm>
 #include <sstream>
 
 bool is_number(char c) {
@@ -294,7 +296,7 @@ void Lexer::next_token() {
 	    }
 
 	    case '~' : {
-	        set_current_token(TokenType::ones_complement, "~");
+	        set_current_token(TokenType::bitwise_not, "~");
 	        break;
 	    }
 
@@ -387,6 +389,10 @@ void Lexer::accept_token(TokenType expected) {
 		throw std::runtime_error("Unexpected Token");
 	}
 }
+bool Lexer::check_token(std::vector<TokenType> expected) {
+	return std::ranges::any_of(expected, [this](TokenType expected) {return check_token(expected);});
+}
+
 
 
 void Lexer::set_current_token(TokenType token_type, const std::string &representation) {

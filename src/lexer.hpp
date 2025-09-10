@@ -41,18 +41,20 @@ class Lexer {
 	explicit Lexer(std::string& input_string) :
 	input_code(input_string), current_line(0), current_column(0), current_token(TokenType::start_of_input, -1, -1),
 	last_token(TokenType::start_of_input, -1, -1) {}
+	Token current_token,last_token;
 
     char consume_character();
     void next_token();
     bool check_token(TokenType expected);
     void accept_token(TokenType expected);
+	bool check_token(std::vector<TokenType> expected);
 
     private:
     std::istringstream input_code;
     int current_line = 0;
     int current_column = 0;
 
-    Token current_token,last_token;
+
     void set_current_token(TokenType token_type, const std::string &representation);
 };
 

@@ -2,12 +2,13 @@
 #define PANDA_TOKEN_HPP
 #include <string>
 #include <utility>
+#include <vector>
 
 /**
  * @enum TokenType
  * @brief enum of all the types possible for <code>Token</code>
  */
-enum TokenType {
+enum class TokenType {
 
 	start_of_input,                    // Start of input marker
 
@@ -42,7 +43,7 @@ enum TokenType {
 	hat,                               // e.g., ^
 	left_shift,                        // e.g., <<
 	right_shift,                       // e.g., >>
-	ones_complement,                   // e.g., ~
+	bitwise_not,                       // e.g., ~
 	logical_and,                       // e.g., &&
 	logical_or,                        // e.g., ||
 	logical_not,                       // e.g., !
@@ -79,6 +80,25 @@ enum TokenType {
 
 	// End of File
 	eof,                               // End of file marker
+};
+
+inline std::vector<TokenType> LITERALS = {
+	TokenType::integer_literal,                   // e.g., 42
+	TokenType::floating_literal,                  // e.g., 3.14
+	TokenType::character_literal,                 // e.g., 'a'
+	TokenType::string_literal,                    // e.g., "hello"
+	TokenType::boolean_literal,
+};
+
+inline std::vector<TokenType> PREFIXES = {
+	TokenType::double_plus,
+	TokenType::double_minus,
+	TokenType::plus,
+	TokenType::minus,
+	TokenType::bitwise_not,
+	TokenType::logical_not,
+	TokenType::star,
+	TokenType::ampersand
 };
 
 struct Token {
