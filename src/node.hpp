@@ -22,6 +22,25 @@ enum class NodeType {
 
 	indirection,                       // e.g., *a
 	address_of,                        // e.g., &a
+
+	binary_multiplication,             // e.g., a*b
+	binary_division,                   // e.g., a/b
+	binary_modulo,                     // e.g., a%b
+	binary_addition,                   // e.g., a+b
+	binary_subtraction,                // e.g., a-b
+
+	greater_than,                      // e.g., >
+	less_than,                         // e.g., <
+	greater_than_or_equal,             // e.g., >=
+	less_than_or_equal,                // e.g., <=
+
+	double_equal,                      // e.g., ==
+	not_equal,                         // e.g., !=
+
+	logical_and,                       // e.g., a&&b
+	logical_or,                        // e.g., a||b
+
+	direct_assignment,                 // e.g., a=b
 };
 NodeType convert_literal(TokenType tokenType);
 NodeType convert_prefix(TokenType tokenType);

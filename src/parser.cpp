@@ -6,11 +6,28 @@ Node Parser::get_next_tree() {
 	return get_instruction();
 }
 Node Parser::get_instruction() {
-
+	return get_expression(); //TODO: implement it
 }
-Node Parser::get_expression() {
 
+
+Node Parser::get_expression(int precedence) {
+
+	auto first_part = get_prefix();
+
+	while (check_op_precedence(lexer.current_token.token_type, precedence)) {
+		auto operator_token = lexer.current_token;
+		lexer.next_token();
+		auto operator_ = BINARY_OPERATORS.at(operator_token.token_type);
+		int new_precedence = operator_.precedence;
+		if (operator_.is_left_to_right) {
+			new_precedence-=1;
+		}
+		auto second_part = get_expression(new_precedence);
+		first_part = Node(operator_.node_type,operator_token,{first_part,second_part});
+	}
+	return first_part;
 }
+
 Node Parser::get_prefix() {
 
 	 if (lexer.check_token(PREFIXES)) {
@@ -31,7 +48,7 @@ Node Parser::get_atom() {
 		return {convert_literal(token.token_type),token};
 
 	} else if (lexer.check_token(TokenType::left_paren)) { // When whe have an expression between parenthesis
-		expression = get_expression();
+		auto expression = get_expression();
 		lexer.accept_token(TokenType::right_paren);
 		return expression;
 
