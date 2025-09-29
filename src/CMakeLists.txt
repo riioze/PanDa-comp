@@ -6,4 +6,10 @@ add_executable(pd main.cpp
         node.hpp
         token.hpp
         parser.cpp
-        parser.hpp)
+        parser.hpp
+        treeoptimizer.cpp
+        treeoptimizer.hpp
+        codegenerator.cpp
+        codegenerator.hpp
+        codeoptimizer.cpp
+        codeoptimizer.hpp)

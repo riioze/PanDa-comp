@@ -41,6 +41,8 @@ enum class NodeType {
 	logical_or,                        // e.g., a||b
 
 	direct_assignment,                 // e.g., a=b
+
+	eof,                               // automatically returned at the end of the file
 };
 NodeType convert_literal(TokenType tokenType);
 NodeType convert_prefix(TokenType tokenType);
@@ -51,6 +53,7 @@ class Node {
 	Token token;
 	std::vector<Node> children;
 
+	Node() : type(NodeType::eof), token(), children() {}
 	Node(NodeType type, Token token) : type(type), token(std::move(token)), children() {}
 	Node(NodeType type, Token token, std::vector<Node> children) : type(type), token(std::move(token)), children(std::move(children)) {}
 

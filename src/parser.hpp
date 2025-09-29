@@ -48,6 +48,7 @@ class Parser {
 
 	public:
 	explicit Parser(Lexer lexer) : lexer(std::move(lexer)) {};
+	explicit Parser(std::istringstream && input_stream) : lexer(std::move(input_stream)) {};
 
 	Node get_next_tree();
 	Node get_instruction();

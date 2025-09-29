@@ -3,6 +3,10 @@
 
 
 Node Parser::get_next_tree() {
+	if (lexer.check_token(TokenType::eof)) {
+		Token eof_token = lexer.last_token;
+		return {NodeType::eof,eof_token};
+	}
 	return get_instruction();
 }
 Node Parser::get_instruction() {

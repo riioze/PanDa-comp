@@ -103,6 +103,7 @@ inline std::vector<TokenType> PREFIXES = {
 
 struct Token {
     public:
+	Token() : token_type(TokenType::start_of_input), line(-1), column(-1) {}
     Token(TokenType token_type,int line,int column) : token_type(token_type), line(line), column(column) {}
 	Token(TokenType token_type,int line,int column, std::string  representation) : token_type(token_type), line(line), column(column), representation(std::move(representation)) {}
 
