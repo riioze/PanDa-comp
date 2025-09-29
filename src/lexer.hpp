@@ -29,7 +29,10 @@ const std::unordered_set<std::string> CPP_KEYWORDS = {
 	"line", "error", "pragma",
 
 	// C++20/C++23 additions
-	"import", "module", "constinit", "std"
+	"import", "module", "constinit", "std",
+
+	// TEMP
+	"debug", // TODO : remove it when necessary
 };
 
 /**
@@ -50,6 +53,8 @@ class Lexer {
     bool check_token(TokenType expected);
     void accept_token(TokenType expected);
 	bool check_token(std::vector<TokenType> expected);
+	bool check_keyword(const std::string &expected);
+	void accept_keyword(const std::string &expected);
 
     private:
     std::istringstream input_code;

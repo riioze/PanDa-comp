@@ -392,7 +392,13 @@ void Lexer::accept_token(TokenType expected) {
 bool Lexer::check_token(std::vector<TokenType> expected) {
 	return std::ranges::any_of(expected, [this](TokenType expected) {return check_token(expected);});
 }
-
+bool Lexer::check_keyword(const std::string& expected) {
+	if (!CPP_KEYWORDS.contains(expected)) throw std::runtime_error( expected + "is not a keyword");
+	return check_token(TokenType::keyword) && expected == last_token.representation;
+}
+void Lexer::accept_keyword(const std::string &expected) {
+	if (!check_keyword(expected)) throw std::runtime_error("Unexpected keyword or token");
+}
 
 
 void Lexer::set_current_token(TokenType token_type, const std::string &representation) {

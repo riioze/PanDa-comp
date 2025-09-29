@@ -4,8 +4,6 @@
 #include <string>
 
 #include "codeoptimizer.hpp"
-#include "include/lexer.hpp"
-#include "include/parser.hpp"
 
 int main(int argc, char **argv){
     if (argc == 1) {

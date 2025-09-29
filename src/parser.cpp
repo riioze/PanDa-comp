@@ -10,7 +10,17 @@ Node Parser::get_next_tree() {
 	return get_instruction();
 }
 Node Parser::get_instruction() {
-	return get_expression(); //TODO: implement it
+
+	if (lexer.check_keyword("debug")) { // TODO : remove it when necessary
+		Node intern_expression = get_expression();
+		lexer.accept_token(TokenType::semicolon);
+		return Node(NodeType::debug,lexer.last_token,{intern_expression});
+	} else {
+		Node intern_expression = get_expression();
+		lexer.accept_token(TokenType::semicolon);
+		return Node(NodeType::drop,lexer.last_token,{intern_expression});
+	}
+
 }
 
 

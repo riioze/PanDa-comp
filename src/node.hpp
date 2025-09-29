@@ -42,6 +42,9 @@ enum class NodeType {
 
 	direct_assignment,                 // e.g., a=b
 
+	drop,                             // Transform an expression into a instruction
+	debug,							  // TEMP for debugging TODO : remove it when necessary
+
 	eof,                               // automatically returned at the end of the file
 };
 NodeType convert_literal(TokenType tokenType);
