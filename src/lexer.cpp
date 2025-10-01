@@ -1,6 +1,7 @@
 #include "lexer.hpp"
 
 #include <algorithm>
+#include <iostream>
 #include <sstream>
 
 bool is_number(char c) {
@@ -21,16 +22,17 @@ bool is_keyword(const std::string& ident) {
 
 char Lexer::consume_character(){
     char c;
-    input_code >> c;
+    c = input_code.get();
     current_column++;
+	std::cout<< static_cast<int>(c) <<std::endl;
     return c;
 }
 
 void Lexer::next_token() {
 	last_token = current_token;
 	char c = consume_character();
-
 	while (isspace(c)) { // removes all the spacing characters
+
 	    c=consume_character();
 	    if (c == '\n') { // TODO: add handling of commentaries
 	        current_line++;
@@ -373,8 +375,13 @@ void Lexer::next_token() {
 	    	break;
 	    }
 
+		case EOF : {
+	    	std::cout<<"got eof"<<std::endl;
+		    set_current_token(TokenType::eof, "EOF");
+	    }
+
 	    default:
-	        throw std::runtime_error("Unexpected character");
+	        throw std::runtime_error(std::string("Unexpected character") + c);
 	}
 }
 bool Lexer::check_token(TokenType expected) {
@@ -386,7 +393,7 @@ bool Lexer::check_token(TokenType expected) {
 }
 void Lexer::accept_token(TokenType expected) {
 	if (!check_token(expected)) {
-		throw std::runtime_error("Unexpected Token");
+		throw std::runtime_error("Unexpected Token : " + current_token.representation + " token type code : " + std::to_string(static_cast<int>(current_token.token_type)));
 	}
 }
 bool Lexer::check_token(std::vector<TokenType> expected) {

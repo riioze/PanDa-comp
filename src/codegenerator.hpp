@@ -35,7 +35,7 @@ const std::map<NodeType,std::pair<std::string,std::string>> EASY_NODES = {
 
 class CodeGenerator {
 public:
-	explicit CodeGenerator(std::istringstream && input_stream) : treeOptimizer(std::move(input_stream)) {
+	explicit CodeGenerator(std::ifstream && input_stream) : treeOptimizer(std::move(input_stream)) {
 
 	};
 	std::vector<std::string> generate_code();

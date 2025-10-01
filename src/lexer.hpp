@@ -1,5 +1,6 @@
 #ifndef PANDA_LEXER_HPP
 #define PANDA_LEXER_HPP
+#include <fstream>
 #include <iosfwd>
 #include <sstream>
 #include <unordered_set>
@@ -44,7 +45,7 @@ class Lexer {
 	explicit Lexer(std::string& input_string) :
 	input_code(input_string), current_line(0), current_column(0), current_token(TokenType::start_of_input, -1, -1),
 	last_token(TokenType::start_of_input, -1, -1) {}
-	explicit Lexer(std::istringstream&& input_stream) : input_code(std::move(input_stream)), current_line(0), current_column(0),
+	explicit Lexer(std::ifstream&& input_stream) : input_code(std::move(input_stream)), current_line(0), current_column(0),
 	current_token(TokenType::start_of_input, -1, -1),last_token(TokenType::start_of_input, -1, -1) {}
 	Token current_token,last_token;
 
@@ -57,7 +58,7 @@ class Lexer {
 	void accept_keyword(const std::string &expected);
 
     private:
-    std::istringstream input_code;
+    std::ifstream input_code;
     int current_line = 0;
     int current_column = 0;
 

@@ -5,7 +5,7 @@
 
 class TreeOptimizer {
 public:
-	explicit TreeOptimizer(std::istringstream && input_stream) : parser(std::move(input_stream)) {};
+	explicit TreeOptimizer(std::ifstream && input_stream) : parser(std::move(input_stream)) {};
 
 	Node get_next_tree();
 private:

@@ -13,18 +13,14 @@ int main(int argc, char **argv){
 
 
     // Read the Input file
-    std::fstream input_file(argv[1], std::ios::in);
+    std::ifstream input_file(argv[1], std::ios::in);
     if (!input_file){
         std::cerr << "Can't open input file" << std::endl;
         return EXIT_FAILURE;
     }
-    std::stringstream content_stream;
-    content_stream << input_file.rdbuf();
-    input_file.close();
-	std::istringstream input_stream(content_stream.str());
 
 
-	CodeOptimizer codeOptimizer(std::move(input_stream));
+	CodeOptimizer codeOptimizer(std::move(input_file));
 
 	std::vector<std::string> code;
 
@@ -35,7 +31,7 @@ int main(int argc, char **argv){
 		}
 	} while (!code.empty());
 
-
+	input_file.close();
 
     return EXIT_SUCCESS;
 }
