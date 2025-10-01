@@ -378,10 +378,11 @@ void Lexer::next_token() {
 		case EOF : {
 	    	std::cout<<"got eof"<<std::endl;
 		    set_current_token(TokenType::eof, "EOF");
+	    	break;
 	    }
 
 	    default:
-	        throw std::runtime_error(std::string("Unexpected character") + c);
+	        throw std::runtime_error(std::string("Unexpected character") + c + " char num : " + std::to_string(static_cast<int>(c)));
 	}
 }
 bool Lexer::check_token(TokenType expected) {
@@ -393,7 +394,7 @@ bool Lexer::check_token(TokenType expected) {
 }
 void Lexer::accept_token(TokenType expected) {
 	if (!check_token(expected)) {
-		throw std::runtime_error("Unexpected Token : " + current_token.representation + " token type code : " + std::to_string(static_cast<int>(current_token.token_type)));
+		throw std::runtime_error("Unexpected Token : " + current_token.representation + " token type code : " + std::to_string(static_cast<int>(current_token.token_type)) + " expected " + std::to_string(static_cast<int>(expected)));
 	}
 }
 bool Lexer::check_token(std::vector<TokenType> expected) {
